@@ -4,7 +4,7 @@ Things about Raspberry Pi.
 
 ## Specification
 
-[Here](https://www.raspberrypi.org/products/model-b-plus/) is the official page of this model.
+[Here](https://www.raspberrypi.org/products/model-b-plus/) is the official page of this model and complete  *RPI* documentation is available [here](https://www.raspberrypi.org/documentation/).
 
   * `512MB`
   * `700MHz`
@@ -39,11 +39,16 @@ After instalation you should see Raspberry Pi Configuration window. Here we are 
 
 Select `Finish` and issue command `sudo reboot` if *RPI* does not reboot automatically.
 
+Read more about `raspi-config` [here](https://www.raspberrypi.org/documentation/configuration/raspi-config.md).
+
+### Default Username and Password
+
+  * username: `pi`
+  * password: `raspberry`
+
+If you cannot login with these credentials, you maybe changed your password using `raspi-config`.
+
 ### WiFi Setup
-
-After configuring and rebooting *RPI*, login with username `pi` and password you set up earlier.
-
-If you didn't set up password, enter `raspberry` (that is default password).
 
 To connect to your WiFi network follow these steps (your WiFi Dongle doesn't have to be plugged in):
 
@@ -63,4 +68,22 @@ To connect to your WiFi network follow these steps (your WiFi Dongle doesn't hav
   4. Reboot *RPI*
       * `sudo reboot` or unplug and plug back in your *RPI*
 
+Read more about setting up WiFi on *RPI* [here](https://www.raspberrypi.org/documentation/configuration/wireless/).
 
+### Keyboard Layout
+
+If your keyboard layout is not set correctly you can easly fix it by editing `keyboard` file on your *RPI*:
+
+  1. Open `keyboard` file for editing
+
+        $ sudo nano /etc/default/keyboard
+
+  2. Then find a line where it says something like this:
+
+        XKBLAYOUT=”gb”
+
+  3. Change the value of `XKBLAYOUT` with [Alpha-2 code](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes) of your country.
+
+    * For example: `XKBLAYOUT="us"`
+
+  4. Save, exit and reboot *RPI*.
