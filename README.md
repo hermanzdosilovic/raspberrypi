@@ -39,3 +39,28 @@ After instalation you should see Raspberry Pi Configuration window. Here we are 
 
 Select `Finish` and issue command `sudo reboot` if *RPI* does not reboot automatically.
 
+### WiFi Setup
+
+After configuring and rebooting *RPI*, login with username `pi` and password you set up earlier.
+
+If you didn't set up password, enter `raspberry` (that is default password).
+
+To connect to your WiFi network follow these steps (your WiFi Dongle doesn't have to be plugged in):
+
+  1. Run this command to open your `wpa_supplicant` configuration file:
+
+        $ sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+
+  2. On the end of the file add this:
+
+        network={
+            ssid="<Network Name>"
+            psk="<Network Password>"
+        }
+
+  3. Insert your WiFi Dongle if you already didn't.
+
+  4. Reboot *RPI*
+      * `sudo reboot` or unplug and plug back in your *RPI*.
+
+
