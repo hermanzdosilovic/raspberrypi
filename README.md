@@ -61,6 +61,6 @@ To connect to your WiFi network follow these steps (your WiFi Dongle doesn't hav
   3. Insert your WiFi Dongle if you already didn't.
 
   4. Reboot *RPI*
-      * `sudo reboot` or unplug and plug back in your *RPI*.
+      * `sudo reboot` or unplug and plug back in your *RPI*
 
 
