@@ -137,3 +137,83 @@ You should also see your new static IP with `hostname -I`.
     $ sudo apt-get upgrade
     $ sudo reboot
 
+### SSH
+
+  1. Change default SSH port to `22219` in `/etc/ssh/sshd_config` file.
+  2. Restart ssh service: `sudo service ssh restart`.
+  3. Add `authorized_keys` file:
+
+        $ mkdir -p ~/.ssh
+        $ sudo nano ~/.ssh/authorized_keys
+
+  4. Append your public ssh key to `~/.ssh/authorized_keys` file.
+
+Read more about changing default SSH port [here](http://linuxlookup.com/howto/change_default_ssh_port)
+
+
+### NoIP Setup
+
+    $ cd /opt
+    $ sudo wget http://www.noip.com/client/linux/noip-duc-linux.tar.gz
+    $ sudo tar xvf noip-duc-linux.tar.gz
+    $ cd noip-2.1.9-1
+    $ sudo make install
+
+Enter your credentials for `no-ip.com`. Set update interval to `5`.
+
+Read more about Linux dynamic update client [here](https://www.noip.com/support/knowledgebase/installing-the-linux-dynamic-update-client-on-ubuntu/).
+
+To make noip start at system starup follow there instructions:
+
+  1. Create custom script for starting and stoping noip:
+
+        $ sudo nano /etc/inid.d/noip
+
+  2. Copy following content, save and exit:
+
+        #!/bin/sh
+
+        ### BEGIN INIT INFO
+        # Provides:          noip
+        # Required-Start:    $remote_fs $syslog
+        # Required-Stop:     $remote_fs $syslog
+        # Default-Start:     2 3 4 5
+        # Default-Stop:      0 1 6
+        # Short-Description: Start noip2 at boot time
+        ### END INIT INFO
+
+        case "$1" in
+          start)
+            echo "Starting noip"
+            /usr/local/bin/noip2
+            ;;
+          stop)
+            echo "Stopping noip"
+            killall noip2
+            ;;
+          *)
+            echo "Usage: /etc/init.d/noip {start|stop}"
+            exit 1
+            ;;
+        esac
+
+        exit 0
+
+  3. Change premissions:
+
+        $ sudo chmod 755 /etc/init.d/noip
+
+  4. Test script:
+
+        $ sudo /etc/init.d/noip start
+        $ sudo /etc/init.d/noip stop
+
+  5. Register script to be run at startup:
+
+        $ sudo update-rc.d noip defaults
+
+  6. If you want to remove script from startup, run the following command:
+
+        $ sudo update-rc.d -f noip defaults
+
+  7. Reboot *RPI*
