@@ -217,3 +217,15 @@ To make noip start at system starup follow there instructions:
         $ sudo update-rc.d -f noip defaults
 
   7. Reboot *RPI*
+
+### Zsh && Ruby Setup
+
+    $ sudo apt-get install zsh
+    $ git clone https://github.com/hermanzdosilovic/dotfiles.git ~/.dotfiles
+    $ cd ~/.dotfiles
+    $ sudo ln -s ~/.dotfiles/punkt.sh /usr/local/bin/punkt
+    $ chsh -s /bin/zsh
+    $ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    $ punkt link zsh
+    $ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+    $ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
