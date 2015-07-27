@@ -87,3 +87,53 @@ If your keyboard layout is not set correctly you can easly fix it by editing `ke
     * For example: `XKBLAYOUT="us"`
 
   4. Save, exit and reboot *RPI*.
+
+### Static IP
+
+Issue following commands and write down addresses you get as output (these are just examples of what they may look like):
+
+  1. `ifconfig wlan0`
+
+    * **inet addr** - *RPI* current IP address: `192.168.1.18`
+    * **Bcast** - broadcast IP range: `192.168.1.255`
+    * **Mask** - subnet mask address: `255.255.255.0`
+
+  2. `netstat -nr`
+
+    * **Gateway** - gateway address: `192.168.1.1`
+    * **Destination** - destination address: `192.168.1.0`
+
+  3. Open your `intefaces` file
+
+    * `sudo nano /etc/network/interfaces`
+
+  4. You will see line `iface wlan0 inet dhcp` or `iface wlan0 inet manual`
+
+    * Replace either of those with `iface wlan0 inet static`
+
+  5. Just below `iface wlan0 inet static` add following:
+
+        address 192.168.1.18
+        netmask 255.255.255.0
+        network 192.168.1.0
+        broadcast 192.168.1.255
+        gateway 192.168.1.1
+
+  6. Reboot *RPI*
+
+Be sure to change numbers I gave you here. These were just examples. Read more about how to set static IP on *RPI* [here](http://www.modmypi.com/blog/tutorial-how-to-give-your-raspberry-pi-a-static-ip-address).
+
+After reboot you should be able to `ping google.com`. If you can't ping Google, or any other address, add this into your `/etc/resolv.conf` file:
+
+
+    nameserver 8.8.8.8
+    nameserver 8.8.4.4
+
+You should also see your new static IP with `hostname -I`.
+
+### Update and Upgrade
+
+    $ sudo apt-get update
+    $ sudo apt-get upgrade
+    $ sudo reboot
+
