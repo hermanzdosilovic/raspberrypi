@@ -282,6 +282,20 @@ Give user all privileges:
 
 Now you can connect just with `mysql -p` or `mysql`.
 
+#### Enable remote access:
+
+In `/etc/mysql/my.cnf` file comment following line:
+
+    bind-address           = 127.0.0.1
+
+Grant access from any IP address:
+
+    mysql> GRANT ALL ON *.* TO 'pi'@'%' WITH GRANT OPTION;
+
+Restart mysql service:
+
+    $ sudo service mysql restart
+
 #### Userful commands:
 
 Show all users:
@@ -295,4 +309,3 @@ Show all users:
 * [GRANT](https://dev.mysql.com/doc/refman/5.1/en/grant.html)
 * [REVOKE](https://dev.mysql.com/doc/refman/5.1/en/revoke.html)
 * [SHOW GRANTS](http://dev.mysql.com/doc/refman/5.6/en/show-grants.html)
-
