@@ -52,7 +52,7 @@ If you cannot login with these credentials, you maybe changed your password usin
 
     $ sudo apt-get update
     $ sudo apt-get upgrade
-    $ sudo apt-get install vim git -y
+    $ sudo apt-get install vim git htop -y
 
 ### WiFi Setup
 
