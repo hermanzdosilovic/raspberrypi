@@ -48,6 +48,12 @@ Read more about `raspi-config` [here](https://www.raspberrypi.org/documentation/
 
 If you cannot login with these credentials, you maybe changed your password using `raspi-config`.
 
+### Basic programs
+
+    $ sudo apt-get update
+    $ sudo apt-get upgrade
+    $ sudo apt-get install vim git -y
+
 ### WiFi Setup
 
 To connect to your WiFi network follow these steps (your WiFi Dongle doesn't have to be plugged in):
@@ -131,12 +137,6 @@ After reboot you should be able to `ping google.com`. If you can't ping Google, 
 
 You should also see your new static IP with `hostname -I`.
 
-### Update and Upgrade
-
-    $ sudo apt-get update
-    $ sudo apt-get upgrade
-    $ sudo reboot
-
 ### SSH
 
   1. Change default SSH port to `22219` in `/etc/ssh/sshd_config` file.
@@ -147,6 +147,19 @@ You should also see your new static IP with `hostname -I`.
         $ sudo nano ~/.ssh/authorized_keys
 
   4. Append your public ssh key to `~/.ssh/authorized_keys` file.
+
+If you are getting this annoying message when running some commands during ssh session:
+
+    perl: warning: Setting locale failed.
+    perl: warning: Please check that your locale settings:
+            LANGUAGE = (unset),
+            LC_ALL = (unset),
+            LC_CTYPE = "UTF-8",
+            LANG = "en_US.UTF-8"
+        are supported and installed on your system.
+    perl: warning: Falling back to the standard locale ("C").
+
+Comment this line `AcceptEnv LANG LC_*` in your `/etc/ssh/sshd_config` file and restart ssh service.
 
 Read more about changing default SSH port [here](http://linuxlookup.com/howto/change_default_ssh_port)
 
@@ -218,14 +231,68 @@ To make noip start at system starup follow there instructions:
 
   7. Reboot *RPI*
 
-### Zsh && Ruby Setup
+### Zsh
 
     $ sudo apt-get install zsh
+    $ chsh -s /bin/zsh
+    $ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    $ setopt EXTENDED_GLOB; for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do ln -s "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"; done
+
+### Ruby
+
+    $ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+    $ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.zshrc
+    $ echo 'eval "$(rbenv init -)"' >> ~/.zshrc
+    $ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+    $ echo 'gem: --no-document' > ~/.gemrc
+
+### Punkt (optional)
+
     $ git clone https://github.com/hermanzdosilovic/dotfiles.git ~/.dotfiles
     $ cd ~/.dotfiles
     $ sudo ln -s ~/.dotfiles/punkt.sh /usr/local/bin/punkt
-    $ chsh -s /bin/zsh
-    $ git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
     $ punkt link zsh
-    $ git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-    $ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+
+### MySQL
+
+When installing mysql you don't have to set any password for `root` (not recomemended).
+
+#### Install:
+
+    $ sudo apt-get install mysql-client mysql-server -y
+
+#### Connect:
+Use `-p` flag if you set up some password for `root` user.
+
+    $ mysql -u root -p
+
+#### Create User:
+
+Create user with password:
+
+    mysql> CREATE USER 'pi'@'localhost' IDENTIFIED BY 'mypass';
+
+or create user without password:
+
+    mysql> CREATE USER 'pi'@'localhost';
+
+Give user all privileges:
+
+    mysql> GRANT ALL ON *.* TO 'pi'@'localhost' WITH GRANT OPTION;
+
+Now you can connect just with `mysql -p` or `mysql`.
+
+#### Userful commands:
+
+Show all users:
+
+    mysql> SELECT user, host FROM mysql.user;
+
+#### Documentation:
+
+* [CREATE USER](https://dev.mysql.com/doc/refman/5.1/en/create-user.html)
+* [DROP USER](https://dev.mysql.com/doc/refman/5.1/en/drop-user.html)
+* [GRANT](https://dev.mysql.com/doc/refman/5.1/en/grant.html)
+* [REVOKE](https://dev.mysql.com/doc/refman/5.1/en/revoke.html)
+* [SHOW GRANTS](http://dev.mysql.com/doc/refman/5.6/en/show-grants.html)
+
