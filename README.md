@@ -52,7 +52,7 @@ If you cannot login with these credentials, you maybe changed your password usin
 
     $ sudo apt-get update
     $ sudo apt-get upgrade
-    $ sudo apt-get install vim git htop -y
+    $ sudo apt-get install -y vim git htop
 
 ### WiFi Setup
 
@@ -245,6 +245,11 @@ To make noip start at system starup follow there instructions:
     $ echo 'eval "$(rbenv init -)"' >> ~/.zshrc
     $ git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
     $ echo 'gem: --no-document' > ~/.gemrc
+    $ sudo apt-get install -y libssl-dev libreadline-dev
+
+Restart your shell and start installing ruby with `rbenv`:
+
+    $ rbenv install 2.1.5
 
 ### Punkt (optional)
 
