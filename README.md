@@ -314,3 +314,7 @@ Show all users:
 * [GRANT](https://dev.mysql.com/doc/refman/5.1/en/grant.html)
 * [REVOKE](https://dev.mysql.com/doc/refman/5.1/en/revoke.html)
 * [SHOW GRANTS](http://dev.mysql.com/doc/refman/5.6/en/show-grants.html)
+
+### Rails
+
+    $ gem install rails -v 4.2.0
