@@ -7,20 +7,28 @@ GPIO.setmode(GPIO.BCM)
 
 LED_GPIO = [26, 19, 13, 6] # blue, green, yellow, red
 leds = []
+duty_cycles = [0, 0, 0, 0]
 
-def fadein(led_indexes, intensity, sleep_time):
-  for dc in range(0, 101):
+def fade_to_intensity(led_indexes, intensity, sleep_time):
+  global duty_cycles
+  step = [1 for x in range(0, len(led_indexes))]
+  for i, val in enumerate(led_indexes):
+    if duty_cycles[val] > intensity[i]:
+      step[i] *= -1
+  
+  cnt = 0
+  while cnt != len(led_indexes):
+    cnt = 0
     for i, val in enumerate(led_indexes):
-      leds[val].ChangeDutyCycle(dc * intensity[i])
-    sleep(sleep_time) 
-
-def fadeout(led_indexes, intensity, sleep_time):
-  for dc in range(100, -1 , -1):
-    for i, val in enumerate(led_indexes):
-      leds[val].ChangeDutyCycle(dc * intensity[i])
+      if duty_cycles[val] == intensity[i]:
+        cnt += 1
+      else:
+        duty_cycles[val] += step[i]
+        leds[val].ChangeDutyCycle(duty_cycles[val])
     sleep(sleep_time) 
 
 def subset_show():
+  global duty_cycles
   intensity_values = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
   for subset in range(1, 2**len(leds)):
     index = 0
@@ -31,8 +39,11 @@ def subset_show():
       index += 1
       subset /= 2 
     
-    fadein(led_indexes, [1 for x in range(0, len(led_indexes))], 0.07) 
-    fadeout(led_indexes, [1 for x in range(0, len(led_indexes))], 0.07) 
+    for intensity in product(intensity_values, repeat=len(led_indexes)):
+      fade_to_intensity(led_indexes, [x * 100 for x in intensity], 0.07)
+      sleep(0.07) 
+    
+    fade_to_intensity(led_indexes, [0 for x in range(0, len(led_indexes))], 0.07)
 
 def main():
   for gpio in LED_GPIO:
@@ -44,7 +55,7 @@ def main():
   try:
     while True:
       subset_show()
-  except:
+  except KeyboardInterrupt:
     pass
 
   for led in leds:
